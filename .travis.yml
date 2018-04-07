@@ -1,16 +1,12 @@
 sudo: required
 
-language: android
-
-jdk: oraclejdk8
-
 services:
   - docker
 
 before_install:
   - docker pull pondthaitay/build-tools-android
-  - docker ps -a
   - docker run pondthaitay/build-tools-android
+  - docker ps -a
   - yes | sdkmanager "platforms;android-26"
 
 before_cache:

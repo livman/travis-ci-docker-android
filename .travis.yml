@@ -9,7 +9,6 @@ before_install:
   - docker pull pondthaitay/build-tools-android
   - docker run pondthaitay/build-tools-android
   - docker ps -a
-  - yes | sdkmanager "platforms;android-26"
 
 before_cache:
   - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock

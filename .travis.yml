@@ -9,4 +9,4 @@ before_install:
   - docker ps -a
 
 script:
-    - ./gradlew clean build
+    - docker build --quiet=true -t pondthaitay/build-tools-android .

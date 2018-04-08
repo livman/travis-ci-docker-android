@@ -9,4 +9,4 @@ before_install:
   - docker ps -a
 
 script:
-  - docker build pondthaitay/build-tools-android
+  - docker run -it --privileged --volume=$(pwd):/opt/workspace pondthaitay/build-tools-android fastlane build

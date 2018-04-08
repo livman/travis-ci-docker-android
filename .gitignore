@@ -6,3 +6,10 @@
 /build
 /captures
 .externalNativeBuild
+.project
+.settings/
+?/.android/
+?/.oracle_jre_usage/
+Gemfile
+Gemfile.lock
+app/.classpath

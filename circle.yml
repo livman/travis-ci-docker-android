@@ -3,7 +3,7 @@ jobs:
   build:
     working_directory: /app
     docker:
-      - image: docker:17.05.0-ce-git
+      - image: pondthaitay/build-tools-android:latest
     steps:
       - checkout
       - setup_remote_docker
@@ -25,10 +25,6 @@ jobs:
           command: |
             set +o pipefail
             docker load -i /caches/app.tar | true
-      - run:
-          name: Build application Docker image
-          command: |
-            docker build --cache-from=app -t app .
       - run:
           name: Save Docker image layer cache
           command: |

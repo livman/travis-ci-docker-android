@@ -3,10 +3,12 @@ jobs:
   build:
     working_directory: /app
     docker:
+      - image: docker:17.05.0-ce-git
       - image: pondthaitay/build-tools-android:latest
     steps:
       - checkout
       - setup_remote_docker
+          docker_layer_caching: true
       # - run:
       #     name: Install dependencies
       #     command: |

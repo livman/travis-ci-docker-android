@@ -4,19 +4,14 @@ jobs:
     working_directory: /app
     docker:
       - image: docker:17.05.0-ce-git
-      - image: pondthaitay/build-tools-android:latest
     steps:
       - checkout
       - setup_remote_docker
           docker_layer_caching: true
-      # - run:
-      #     name: Install dependencies
-      #     command: |
-      #       apk add --no-cache \
-      #         py-pip=9.0.0-r1
-      #       pip install \
-      #         docker-compose==1.12.0 \
-      #         awscli==1.11.76
+      - run:
+          name: Install dependencies
+          command: |
+              docker pull pondthaitay/build-tools-android
       - restore_cache:
           keys:
             - v1-{{ .Branch }}

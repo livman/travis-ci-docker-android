@@ -11,11 +11,10 @@ cache:
  - $HOME/.gradle/wrapper/
 
 before_install:
+  - rm -f $HOME/.gradle/caches/modules-2/modules-2.lock
   - docker pull pondthaitay/build-tools-android
   - docker run pondthaitay/build-tools-android
   - docker ps -a
-  - rm -f $HOME/.gradle/caches/modules-2/modules-2.lock
-  - rm -fr $HOME/.gradle/caches/*/plugin-resolution/
 
 script:
   - docker run -it -v "$HOME/.gradle":/root/.gradle -v $(pwd):/opt/workspace pondthaitay/build-tools-android fastlane build

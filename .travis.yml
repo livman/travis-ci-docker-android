@@ -7,7 +7,7 @@ services:
 
 install :
   - docker pull pondthaitay/build-tools-android
-  - docker save pondthaitay/build-tools-android | gzip > docker/pondthaitay/build-tools-android.tar.gz
+  - docker save $HOME/docker/pondthaitay/build-tools-android | gzip > $HOME/docker/pondthaitay/build-tools-android.tar.gz
   - docker run pondthaitay/build-tools-android
   - docker ps -a
 

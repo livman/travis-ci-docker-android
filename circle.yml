@@ -9,10 +9,10 @@ jobs:
       - setup_remote_docker:
           docker_layer_caching: true
       - run:
-          docker build .    
+          docker build .
       - run:
           name: Build application Docker image	
-          command: |	
+          command: |
             docker build --cache-from=app -t app .
       - run:
           name: Run tests

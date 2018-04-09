@@ -13,8 +13,10 @@ script:
   - docker run -it -v "$HOME/.gradle":/root/.gradle -v $(pwd):/opt/workspace "${IMAGE_NAME}" fastlane build
 
 before_script :
-  - if [[ -d $HOME/docker ]]; then 
-      ls $HOME/docker/*.tar.gz | xargs -I {file} sh -c "zcat {file} | docker load"; 
+  - if [-d $HOME/docker]; then 
+      ls $HOME/docker/*.tar.gz | 
+      xargs -I {file} sh -c "zcat {file} | 
+      docker load
     else 
       docker pull "$IMAGE_NAME" || true
     fi

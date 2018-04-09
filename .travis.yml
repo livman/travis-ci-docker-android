@@ -1,15 +1,20 @@
 sudo: required
 
-language: android
+language: bash
+
+env:
+  global: 
+    - IMAGE_NAME=pondthaitay/build-tools-android
 
 services:
   - docker
 
-install :
-  - docker pull pondthaitay/build-tools-android
-  - docker save docker/pondthaitay/build-tools-android | gzip > docker/pondthaitay/build-tools-android.tar.gz
-  - docker run pondthaitay/build-tools-android
-  - docker ps -a
+before_script :
+  - docker pull "$IMAGE_NAME" || true
+  - docker save docker/"$IMAGE_NAME" | gzip > docker/"$IMAGE_NAME".tar.gz
+
+after_script:
+  - docker images
 
 cache:
  directories:
@@ -17,8 +22,6 @@ cache:
  - $HOME/.gradle/wrapper/
  - docker
 
-before_script:
-- gzip -dc docker/pondthaitay/build-tools-android.tar.gz | docker load
-
 script:
-  - docker run -it -v "$HOME/.gradle":/root/.gradle -v $(pwd):/opt/workspace pondthaitay/build-tools-android fastlane build
+  - docker build --pull --cache-from "${IMAGE_NAME}"
+  - docker run -it -v "$HOME/.gradle":/root/.gradle -v $(pwd):/opt/workspace "${IMAGE_NAME}" fastlane build

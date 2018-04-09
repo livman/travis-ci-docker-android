@@ -5,14 +5,17 @@ jobs:
       - image: pondthaitay/build-tools-android
     steps:
       - checkout
+      - setup_remote_docker:
+          docker_layer_caching: true # default - false  
+      - run: docker build .
       - restore_cache:
           key: jars-{{ checksum "build.gradle" }}-{{ checksum  "app/build.gradle" }}
       - save_cache:
           paths:
             - ~/.gradle
           key: jars-{{ checksum "build.gradle" }}-{{ checksum  "app/build.gradle" }}
-      - run:
-          name: Build Application
+      - fastlane_build:
+          name: Fastlane Build Application
           command: fastlane build
       - store_artifacts:
           path: app/build/reports

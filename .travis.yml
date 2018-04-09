@@ -19,12 +19,13 @@ cache:
     - $HOME/docker
 
 before_install:
-  - docker pull pondthaitay/build-tools-android
-  - docker run pondthaitay/build-tools-android
+  - docker pull ${IMAGE_NAME} || true
+  - docker run ${IMAGE_NAME}
   - docker ps -a
 
 # before_script :
-  - if [[ -d $HOME/docker ]]; then ls $HOME/docker/*.tar.gz | xargs -I {file} sh -c "zcat {file} | docker load"; fi
+  # - if [[ -d $HOME/docker ]]; then ls $HOME/docker/*.tar.gz | xargs -I {file} sh -c "zcat {file} | docker load"; fi
 
 script:
+  - docker build --cache-from ${IMAGE_NAME}
   - docker run -it -v "$HOME/.gradle":/root/.gradle -v $(pwd):/opt/workspace "${IMAGE_NAME}" fastlane build

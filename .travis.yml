@@ -11,7 +11,6 @@ services:
 
 before_script :
   - docker pull "$IMAGE_NAME" || true
-  - docker save docker/"$IMAGE_NAME" | gzip > docker/"$IMAGE_NAME".tar.gz
 
 after_script:
   - docker images
@@ -20,7 +19,6 @@ cache:
  directories:
  - $HOME/.gradle/caches/
  - $HOME/.gradle/wrapper/
- - docker
 
 script:
   - docker build --pull --cache-from "${IMAGE_NAME}"

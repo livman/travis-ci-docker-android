@@ -9,17 +9,22 @@ env:
 services:
   - docker
 
-before_script :
-  - docker pull "$IMAGE_NAME" || true
+script:
+  - docker run -it -v "$HOME/.gradle":/root/.gradle -v $(pwd):/opt/workspace "${IMAGE_NAME}" fastlane build
 
-after_script:
-  - docker images
+before_script :
+  - if [[ -d $HOME/docker ]]; then 
+      ls $HOME/docker/*.tar.gz | xargs -I {file} sh -c "zcat {file} | docker load"; 
+    else 
+      docker pull "$IMAGE_NAME" || true
+    fi
 
 cache:
+ bundler: true
  directories:
- - $HOME/.gradle/caches/
- - $HOME/.gradle/wrapper/
+  - $HOME/.gradle/caches/
+  - $HOME/.gradle/wrapper/
+  - $HOME/docker
 
-script:
-  - docker build --pull --cache-from "$IMAGE_NAME"
-  - docker run -it -v "$HOME/.gradle":/root/.gradle -v $(pwd):/opt/workspace "${IMAGE_NAME}" fastlane build
+before_cache:
+  - mkdir -p $HOME/docker && docker images -a --filter='dangling=false' --format '{{.Repository}}:{{.Tag}} {{.ID}}' | xargs -n 2 -t sh -c 'test -e $HOME/docker/$1.tar.gz || docker save $0 | gzip -2 > $HOME/docker/$1.tar.gz'

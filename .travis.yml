@@ -1,30 +1,26 @@
-sudo: required
+  sudo: required
 
-language: bash
+  language: bash
 
-env:
-  global: 
-    - IMAGE_NAME=pondthaitay/build-tools-android
+  env:
+    global: 
+      - IMAGE_NAME=pondthaitay/build-tools-android
 
-services:
-  - docker
+  services:
+    - docker
 
-script:
-  - docker run -it -v "$HOME/.gradle":/root/.gradle -v $(pwd):/opt/workspace "${IMAGE_NAME}" fastlane build
+  script:
+    - docker run -it -v "$HOME/.gradle":/root/.gradle -v $(pwd):/opt/workspace "${IMAGE_NAME}" fastlane build
 
-before_script :
-  - if [[ -d $HOME/docker ]]; then 
-      ls $HOME/docker/*.tar.gz | xargs -I {file} sh -c "zcat {file} | docker load"
-    else
-      docker pull "$IMAGE_NAME" || true
-    fi
-    
-cache:
- bundler: true
- directories:
-  - $HOME/.gradle/caches/
-  - $HOME/.gradle/wrapper/
-  - $HOME/docker
+  before_script :
+    - if [[ -d $HOME/docker ]]; then ls $HOME/docker/*.tar.gz | xargs -I {file} sh -c \"zcat {file} | docker load\" else docker pull \"$IMAGE_NAME\" || true fi
+      
+  cache:
+  bundler: true
+  directories:
+    - $HOME/.gradle/caches/
+    - $HOME/.gradle/wrapper/
+    - $HOME/docker
 
-before_cache:
-  - mkdir -p $HOME/docker && docker images -a --filter='dangling=false' --format '{{.Repository}}:{{.Tag}} {{.ID}}' | xargs -n 2 -t sh -c 'test -e $HOME/docker/$1.tar.gz || docker save $0 | gzip -2 > $HOME/docker/$1.tar.gz'
+  before_cache:
+    - mkdir -p $HOME/docker && docker images -a --filter='dangling=false' --format '{{.Repository}}:{{.Tag}} {{.ID}}' | xargs -n 2 -t sh -c 'test -e $HOME/docker/$1.tar.gz || docker save $0 | gzip -2 > $HOME/docker/$1.tar.gz'

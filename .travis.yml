@@ -7,22 +7,18 @@ services:
 
 install :
   - docker pull pondthaitay/build-tools-android
-  - docker save $HOME/docker/pondthaitay/build-tools-android | gzip > $HOME/docker/pondthaitay/build-tools-android.tar.gz
+  - docker save docker/pondthaitay/build-tools-android | gzip > docker/pondthaitay/build-tools-android.tar.gz
   - docker run pondthaitay/build-tools-android
   - docker ps -a
-
-before_cache:
-  - mkdir -p $HOME/docker && docker images -a --filter='dangling=false' --format '{{.Repository}}:{{.Tag}} {{.ID}}' | xargs -n 2 -t sh -c 'test -e $HOME/docker/$1.tar.gz || docker save $0 | gzip -2 > $HOME/docker/$1.tar.gz'
 
 cache:
  directories:
  - $HOME/.gradle/caches/
  - $HOME/.gradle/wrapper/
- - $HOME/docker
+ - docker
 
-before_install:
-  - if [[ -d $HOME/docker ]]; then ls $HOME/docker/*.tar.gz | xargs -I {file} sh -c "zcat {file} | docker load"; fi
+before_script:
+- gzip -dc docker/pondthaitay/build-tools-android.tar.gz | docker load
 
 script:
   - docker run -it -v "$HOME/.gradle":/root/.gradle -v $(pwd):/opt/workspace pondthaitay/build-tools-android fastlane build
-

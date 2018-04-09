@@ -12,17 +12,18 @@ jobs:
     steps:
       - checkout
       - setup_remote_docker
-      - restore_cache:
-          key: jars-{{ checksum "build.gradle" }}-{{ checksum  "app/build.gradle" }}
-      - save_cache:
-          paths:
-            - ~/.gradle
-          key: jars-{{ checksum "build.gradle" }}-{{ checksum  "app/build.gradle" }}
-      - run:
-          name: Fastlane Build Application
-          command: fastlane build
-      - store_artifacts:
-          path: app/build/reports
-          destination: reports
-      - store_test_results:
-          path: app/build/test-results
+      - run: docker build .
+      # - restore_cache:
+      #     key: jars-{{ checksum "build.gradle" }}-{{ checksum  "app/build.gradle" }}
+      # - save_cache:
+      #     paths:
+      #       - ~/.gradle
+      #     key: jars-{{ checksum "build.gradle" }}-{{ checksum  "app/build.gradle" }}
+      # - run:
+      #     name: Fastlane Build Application
+      #     command: fastlane build
+      # - store_artifacts:
+      #     path: app/build/reports
+      #     destination: reports
+      # - store_test_results:
+      #     path: app/build/test-results

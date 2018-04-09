@@ -16,15 +16,15 @@ cache:
   directories:
     - $HOME/.gradle/caches/
     - $HOME/.gradle/wrapper/
-    - $HOME/docker
+    - docker
 
 before_script:
-  - gzip -dc $HOME/docker/${IMAGE_NAME}.tar.gz | docker load
+  - gzip -dc docker/${IMAGE_NAME}.tar.gz | docker load
 
 install: 
-  - mkdir -p $HOME/docker
+  - mkdir -p docker
   - docker pull ${IMAGE_NAME}
-  - docker save ${IMAGE_NAME} | gzip > $HOME/docker/${IMAGE_NAME}.tar.gz
+  - docker save ${IMAGE_NAME} | gzip > docker/${IMAGE_NAME}.tar.gz
   - docker ps -a
 
 # before_script :

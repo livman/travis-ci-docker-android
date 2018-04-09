@@ -3,7 +3,7 @@ jobs:
   build:
     working_directory: /app
     docker:
-      - image: docker:17.05.0-ce-git
+      - image: pondthaitay/build-tools-android
     steps:
       - checkout
       - setup_remote_docker
@@ -11,7 +11,7 @@ jobs:
       - run:
           name: Install dependencies
           command: |
-              docker pull pondthaitay/build-tools-android
+            echo "RUN"
       - restore_cache:
           keys:
             - v1-{{ .Branch }}
@@ -34,7 +34,7 @@ jobs:
       - run:
           name: Run tests
           command: |
-           echo "test"
+            echo "test"
       # - deploy:
       #     name: Push application Docker image
       #     command: |

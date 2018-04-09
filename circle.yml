@@ -11,7 +11,7 @@ jobs:
           paths:
             - ~/.gradle
           key: jars-{{ checksum "build.gradle" }}-{{ checksum  "app/build.gradle" }}
-      - build:
+      - run:
           name: Build Application
           command: docker run -it -v "$HOME/.gradle":/root/.gradle -v $(pwd):/opt/workspace "${IMAGE_NAME}" fastlane build
       - store_artifacts:

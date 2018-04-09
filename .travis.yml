@@ -18,14 +18,17 @@ cache:
     - $HOME/.gradle/wrapper/
     - $HOME/docker
 
-before_install:
+before_script:
+  - gzip -dc $HOME/docker/${IMAGE_NAME}.tar.gz | docker load
+
+install: 
   - docker pull ${IMAGE_NAME}
-  - docker run ${IMAGE_NAME}
+  - docker save ${IMAGE_NAME} | gzip > $HOME/docker/${IMAGE_NAME}.tar.gz
   - docker ps -a
 
 # before_script :
   # - if [[ -d $HOME/docker ]]; then ls $HOME/docker/*.tar.gz | xargs -I {file} sh -c "zcat {file} | docker load"; fi
 
 script:
-  - docker build --cache-from ${IMAGE_NAME}
+  - docker build ${IMAGE_NAME}
   - docker run -it -v "$HOME/.gradle":/root/.gradle -v $(pwd):/opt/workspace "${IMAGE_NAME}" fastlane build

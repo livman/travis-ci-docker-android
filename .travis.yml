@@ -22,6 +22,7 @@ before_script:
   - gzip -dc $HOME/docker/${IMAGE_NAME}.tar.gz | docker load
 
 install: 
+  - mkdir -p $HOME/docker
   - docker pull ${IMAGE_NAME}
   - docker save ${IMAGE_NAME} | gzip > $HOME/docker/${IMAGE_NAME}.tar.gz
   - docker ps -a
